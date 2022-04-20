@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using API.DTOs;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace API.Controllers
 {
 	[Route("api/[controller]")]
@@ -19,9 +17,7 @@ namespace API.Controllers
 		{
 			_context = context;
 			_mapper = mapper;
-			_mapper = mapper;
 		}
-
 
 		// GET: api/<CleaningObjectController>
 		[HttpGet("{id}")]
@@ -31,13 +27,13 @@ namespace API.Controllers
 		}
 		
 		[HttpPost("add")]
-		public async Task AdddCleaningObject(CleaningObject cleaningObject)
+		public async Task AddCleaningObject(CleaningObject cleaningObject)
 		{
 			await _context.AddEntityAsync(cleaningObject);
 		}
 
-		[HttpGet("/all")]
-		public async Task<ActionResult<IReadOnlyList<CleaningObject>>> GetAllObjects()
+		[HttpGet("all")]
+		public async Task<ActionResult<IReadOnlyList<CleaningObjectShortInfo>>> GetAllObjects()
 		{
 			var objectList = await _context.ListAllAsync();
 			return Ok(_mapper.Map<IReadOnlyList<CleaningObject>, IReadOnlyList<CleaningObjectShortInfo>>(objectList));
