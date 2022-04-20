@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using Core.OrderService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,19 @@ namespace Infrastructure.Services
 			_orderRepository = orderRepository;
 		}
 
+		public void AddNewCleanerToOrder(int orderId, int newCleaner)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddOrder(OrderBaseInfo orderInfo)
+		{
+			throw new NotImplementedException();
+		}
+
+		public OrderStatus UpdateOrderStatus(int orderId)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

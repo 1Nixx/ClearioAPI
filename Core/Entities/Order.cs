@@ -10,9 +10,10 @@ namespace Core.Entities
 	{
 		public int OrderId { get; set; }
 		public CleaningObject CleaningObject { get; set; }
+		public int CleaningObjectId { get; set; }
 		public DateTime TimeStart { get; set; }
 		public DateTime TimeEnd { get; set; }
-		public CleaningComand Comand { get; set; }
+		public List<CleanTeamMember> Cleaners { get; set; }
 		public OrderStatus OrderStatus { get; set; }
 	}
 
