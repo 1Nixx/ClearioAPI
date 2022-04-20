@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,13 @@ namespace Infrastructure.Data
 {
 	public class CleaningContext : DbContext
 	{
-		public CleaningContext()
+		public CleaningContext(DbContextOptions<CleaningContext> options): base(options)
 		{
-			
+			Database.EnsureCreated();
 		}
 
+		public DbSet<CleaningObject> CleaningObjects { get; set; }
+		public DbSet<Order> Orders { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

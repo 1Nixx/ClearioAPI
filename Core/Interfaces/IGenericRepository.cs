@@ -8,5 +8,11 @@ namespace Core.Interfaces
 {
 	public interface IGenericRepository<T> where T : class
 	{
-	}
+        Task<T> GetByIdAsync(int id);
+        Task<IReadOnlyList<T>> ListAllAsync();
+        Task<int> CountAllAsync();
+        Task UpdateEntityAsync(T entity);
+        Task AddEntityAsync(T entity);
+        Task DeleteByIdAsync(int id);
+    }
 }

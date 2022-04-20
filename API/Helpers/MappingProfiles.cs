@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using API.DTOs;
+using AutoMapper;
+using Core.Entities;
 
 namespace API.Helpers
 {
@@ -6,6 +8,10 @@ namespace API.Helpers
     {
         public MappingProfiles()
         {
+            CreateMap<CleaningObject, CleaningObjectShortInfo>()
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.ObjectName))
+                .ForMember(d => d.ObjectId, o => o.MapFrom(s => s.CleaningObjectId))
+                .ForMember(d => d.Location, o => o.MapFrom(s => s.ObjectLocation));
             //CreateMap<Order, OrderShortInfo>()
             //    .ForMember(d => d.OrderId, o => o.MapFrom(s => s.OrderId))
             //    .ForMember(d => d.CustomerNumber, o => o.MapFrom(s => s.CustomerName))

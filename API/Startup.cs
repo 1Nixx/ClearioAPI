@@ -1,5 +1,6 @@
 ﻿using API.Helpers;
 using API.Middleware;
+using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
