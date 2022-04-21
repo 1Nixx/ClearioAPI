@@ -26,6 +26,7 @@ namespace API
 			services.AddScoped<ICleanerRepository, CleanerRepository>();
 			services.AddScoped<IOrderService, OrderService>();
 			services.AddScoped<ICleanerNotificationService, CleanerNotificationService>();
+			services.AddSingleton<DelayedTaskService>();
 
 			services.AddCors();
 

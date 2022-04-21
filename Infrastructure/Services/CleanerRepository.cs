@@ -10,47 +10,42 @@ namespace Infrastructure.Services
 {
 	public class CleanerRepository : ICleanerRepository
 	{
-		public int AddCleaner(CleanerShortInfo cleanerInfo)
+		public Task<int> AddCleanerAsync(CleanerShortInfo cleanerInfo)
 		{
 			throw new NotImplementedException();
 		}
 
-		public List<CleanerInfo> GetALLCleaners(string address)
+		public Task<List<CleanerInfo>> GetAllCleanersAsync()
 		{
 			throw new NotImplementedException();
 		}
 
-		public List<CleanerInfo> GetAllCleaners()
+		public Task<List<CleanerInfo>> GetALLCleanersByAddressAsync(string address)
 		{
 			throw new NotImplementedException();
 		}
 
-		public List<CleanerInfo> GetALLCleanersByAddress(string address)
+		public Task<CleanerInfo> GetCleanerAsync(string address)
 		{
 			throw new NotImplementedException();
 		}
 
-		public CleanerInfo GetCleaner(string address)
+		public Task<CleanerInfo> GetCleanerByIdAsync(int cleanerId)
 		{
-			throw new NotImplementedException();
-		}
-
-		public CleanerInfo GetCleanerById(int cleanerId)
-		{
-			return new CleanerInfo
+			return Task.Run(() => new CleanerInfo
 			{
 				CleanerId = cleanerId,
 				CleanerName = $"Nikita{cleanerId}",
 				PhoneNumber = $"+3753333551{cleanerId}"
-			};
+			});
 		}
 
-		public List<CleanerInfo> GetSetOfCleaners(int amount, string address)
+		public Task<List<CleanerInfo>> GetSetOfCleanersAsync(int amount, string address)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void RemoveCleaner(int cleanerId)
+		public Task RemoveCleanerAsync(int cleanerId)
 		{
 			throw new NotImplementedException();
 		}

@@ -9,12 +9,12 @@ namespace Core.Interfaces
 {
 	public interface ICleanerRepository
 	{
-		List<CleanerInfo> GetALLCleanersByAddress(string address);
-		List<CleanerInfo> GetAllCleaners();
-		List<CleanerInfo> GetSetOfCleaners(int amount, string address);
-		CleanerInfo GetCleaner(string address);
-		CleanerInfo GetCleanerById(int cleanerId);
-		int AddCleaner(CleanerShortInfo cleanerInfo);
-		void RemoveCleaner(int cleanerId);
+		Task<List<CleanerInfo>> GetALLCleanersByAddressAsync(string address);
+		Task<List<CleanerInfo>> GetAllCleanersAsync();
+		Task<List<CleanerInfo>> GetSetOfCleanersAsync(int amount, string address);
+		Task<CleanerInfo> GetCleanerAsync(string address);
+		Task<CleanerInfo> GetCleanerByIdAsync(int cleanerId);
+		Task<int> AddCleanerAsync(CleanerShortInfo cleanerInfo);
+		Task RemoveCleanerAsync(int cleanerId);
 	}
 }

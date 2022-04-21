@@ -11,7 +11,6 @@ namespace Core.OrderService
 	public interface IOrderService
 	{
 		Task AddOrderAsync(OrderBaseInfo orderInfo);
-		OrderStatus UpdateOrderStatus(int orderId);
 		Task AddNewCleanerToOrderAsync(int orderId, int newCleaner);
 	}
 }

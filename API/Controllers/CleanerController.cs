@@ -25,45 +25,45 @@ namespace API.Controllers
 		}
 
 		[HttpGet("all")]
-		public List<CleanerInfo> GetAllCleaners()
+		public async Task<List<CleanerInfo>> GetAllCleaners()
 		{
-			return _cleanerRepository.GetAllCleaners();
+			return await _cleanerRepository.GetAllCleanersAsync();
 		}
 
 		[HttpGet("allbyaddress")]
-		public List<CleanerInfo> GetAllCleanersByAddress(string address)
+		public async Task<List<CleanerInfo>> GetAllCleanersByAddress(string address)
 		{
-			return _cleanerRepository.GetALLCleanersByAddress(address);
+			return await _cleanerRepository.GetALLCleanersByAddressAsync(address);
 		}
 
 		[HttpGet("set/{amount}")]
-		public List<CleanerInfo> GetSetCleaners (int amount,[FromQuery] string address)
+		public async Task<List<CleanerInfo>> GetSetCleaners (int amount,[FromQuery] string address)
 		{
-			return _cleanerRepository.GetSetOfCleaners(amount, address);
+			return await _cleanerRepository.GetSetOfCleanersAsync(amount, address);
 		}
 
 		[HttpGet("getone")]
-		public CleanerInfo GetCleaner(string address)
+		public async Task<CleanerInfo> GetCleaner(string address)
 		{
-			return _cleanerRepository.GetCleaner(address);
+			return await _cleanerRepository.GetCleanerAsync(address);
 		}
 
 		[HttpGet("getone/{id}")]
-		public CleanerInfo GetCleanerById(int id)
+		public async Task<CleanerInfo> GetCleanerById(int id)
 		{
-			return _cleanerRepository.GetCleanerById(id);
+			return await _cleanerRepository.GetCleanerByIdAsync(id);
 		}
 
 		[HttpPost("add")]
-		public int AddCleaner(CleanerShortInfo cleanerInfo)
+		public async Task<int> AddCleaner(CleanerShortInfo cleanerInfo)
 		{
-			return _cleanerRepository.AddCleaner(cleanerInfo);
+			return await _cleanerRepository.AddCleanerAsync(cleanerInfo);
 		}
 
 		[HttpDelete("delete")]
-		public void RemoveCleaner(int id)
+		public async Task RemoveCleaner(int id)
 		{
-			_cleanerRepository.RemoveCleaner(id);	
+			_cleanerRepository.RemoveCleanerAsync(id);	
 		}
 	}
 }
