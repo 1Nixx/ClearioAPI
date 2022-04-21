@@ -2,6 +2,7 @@
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
+using Core.OrderService;
 using Core.Specification;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +15,12 @@ namespace API.Controllers
 	{
 		private readonly IGenericRepository<Order> _context;
 		private readonly IMapper _mapper;
-		public OrderController(IGenericRepository<Order> context, IMapper mapper)
+		private readonly IOrderService _orderService;
+		public OrderController(IGenericRepository<Order> context, IMapper mapper, IOrderService orderService)
 		{
 			_context = context;
 			_mapper = mapper;
+			_orderService = orderService;
 		}
 
 		[HttpGet("all")]
@@ -25,15 +28,29 @@ namespace API.Controllers
 		{
 			var spec = new OrdersWithObjectData();
 			var orderList = await _context.ListAsync(spec);
-			
+
 			return Ok(_mapper.Map<IReadOnlyList<Order>, IReadOnlyList<OrderShortInfo>>(orderList));
 		}
 
 		[HttpPost("add")]
-		public Task AddOrder()
+		public async Task AddOrder([FromBody] OrderBaseInfo order)
 		{
-			return null;
+			await _orderService.AddOrderAsync(order);
 		}
 
+		[HttpGet("{id}")]
+		public async Task<ActionResult<Order>> GetOrderFullInfo(int id)
+		{
+			var spec = new OrderWithFullInfo(id);
+
+			var order = await _context.GetEntityWithSpec(spec);
+			return Ok(order);
+		}
+
+		[HttpPost("newcleaner/{id}")]
+		public async Task AddCleanerToOrder(int id,[FromQuery] int cleanerId)
+		{
+			await _orderService.AddNewCleanerToOrderAsync(id, cleanerId);
+		}
 	}
 }

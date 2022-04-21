@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Core.Entities
 {
-	public class CleaningObject
+	public class CleaningObject : BaseEntity
 	{
-		public int CleaningObjectId { get; set; }
 		public string ObjectName { get; set; }
 		public int ObjectSquare { get; set; }
 		public string ObjectLocation { get; set; }

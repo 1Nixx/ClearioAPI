@@ -5,10 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Entities;
 
 namespace Infrastructure.Data
 {
-	public class GenericRepository<T> : IGenericRepository<T> where T : class
+	public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 	{
 		private CleaningContext _context { get; set; }
 		public GenericRepository(CleaningContext context)
@@ -38,16 +39,18 @@ namespace Infrastructure.Data
 			return await _context.Set<T>().ToListAsync();
 		}
 
-		public async Task UpdateEntityAsync(T entity)
+		public async Task<int> UpdateEntityAsync(T entity)
 		{
 			_context.Set<T>().Update(entity);
 			await _context.SaveChangesAsync();
+			return entity.Id;
 		}
 
-		public async Task AddEntityAsync(T entity)
+		public async Task<int> AddEntityAsync(T entity)
 		{
 			await _context.AddAsync(entity);
 			await _context.SaveChangesAsync();
+			return entity.Id;
 		}
 
 		public async Task<T> GetEntityWithSpec(ISpecification<T> spec)

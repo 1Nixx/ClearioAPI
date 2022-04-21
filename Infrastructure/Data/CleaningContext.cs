@@ -1,10 +1,12 @@
 ﻿using Core.Entities;
-using Microsoft.EntityFrameworkCore;
+//using Microsoft.EntityFrameworkCore;
+//using System.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
@@ -12,7 +14,7 @@ namespace Infrastructure.Data
 	{
 		public CleaningContext(DbContextOptions<CleaningContext> options): base(options)
 		{
-			Database.EnsureCreated();
+			Database.Migrate();
 		}
 
 		public DbSet<CleaningObject> CleaningObjects { get; set; }

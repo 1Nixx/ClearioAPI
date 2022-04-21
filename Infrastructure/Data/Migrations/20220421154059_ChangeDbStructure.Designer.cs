@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(CleaningContext))]
-    partial class CleaningContextModelSnapshot : ModelSnapshot
+    [Migration("20220421154059_ChangeDbStructure")]
+    partial class ChangeDbStructure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.4");
@@ -43,7 +45,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CleaningObjects", (string)null);
+                    b.ToTable("CleaningObjects");
                 });
 
             modelBuilder.Entity("Core.Entities.CleanTeamMember", b =>
@@ -82,7 +84,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("CleanTeamMember", (string)null);
+                    b.ToTable("CleanTeamMember");
                 });
 
             modelBuilder.Entity("Core.Entities.Order", b =>
@@ -107,7 +109,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("CleaningObjectId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Core.Entities.CleanTeamMember", b =>

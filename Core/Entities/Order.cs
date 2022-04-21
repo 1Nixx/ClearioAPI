@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Core.Entities
 {
-	public class Order
+	public class Order : BaseEntity
 	{
-		public int OrderId { get; set; }
 		public CleaningObject CleaningObject { get; set; }
 		public int CleaningObjectId { get; set; }
 		public DateTime TimeStart { get; set; }

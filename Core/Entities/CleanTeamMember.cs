@@ -1,8 +1,7 @@
 ﻿namespace Core.Entities
 {
-	public class CleanTeamMember
+	public class CleanTeamMember : BaseEntity
 	{
-		public int CleanTeamMemberId { get; set; }
 		public bool IsStartingWorking { get; set; }
 		public bool IsFinishedWorking { get; set; }
 		public string CleanerName { get; set; }

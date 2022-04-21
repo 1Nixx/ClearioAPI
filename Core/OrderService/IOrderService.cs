@@ -10,8 +10,8 @@ namespace Core.OrderService
 {
 	public interface IOrderService
 	{
-		void AddOrder(OrderBaseInfo orderInfo);
+		Task AddOrderAsync(OrderBaseInfo orderInfo);
 		OrderStatus UpdateOrderStatus(int orderId);
-		void AddNewCleanerToOrder(int orderId, int newCleaner);
+		Task AddNewCleanerToOrderAsync(int orderId, int newCleaner);
 	}
 }
