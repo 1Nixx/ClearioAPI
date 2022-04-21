@@ -10,12 +10,22 @@ namespace Infrastructure.Services
 {
 	public class CleanerRepository : ICleanerRepository
 	{
-		public int AddCleaner(CleanerInfo cleanerInfo)
+		public int AddCleaner(CleanerShortInfo cleanerInfo)
 		{
 			throw new NotImplementedException();
 		}
 
 		public List<CleanerInfo> GetALLCleaners(string address)
+		{
+			throw new NotImplementedException();
+		}
+
+		public List<CleanerInfo> GetAllCleaners()
+		{
+			throw new NotImplementedException();
+		}
+
+		public List<CleanerInfo> GetALLCleanersByAddress(string address)
 		{
 			throw new NotImplementedException();
 		}
