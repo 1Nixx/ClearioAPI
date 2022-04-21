@@ -1,6 +1,10 @@
 ﻿using API.Helpers;
 using API.Middleware;
+using Core.CleanerNotificationService;
+using Core.Interfaces;
+using Core.OrderService;
 using Infrastructure.Data;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -19,6 +23,10 @@ namespace API
 		{
 			services.AddAutoMapper(typeof(MappingProfiles));
 			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+			services.AddScoped<ICleanerRepository, CleanerRepository>();
+			services.AddScoped<IOrderService, OrderService>();
+			services.AddScoped<ICleanerNotificationService, CleanerNotificationService>();
+			services.AddSingleton<DelayedTaskService>();
 
 			services.AddCors();
 
