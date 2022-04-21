@@ -12,27 +12,53 @@ namespace Infrastructure.Services
 	{
 		public Task<int> AddCleanerAsync(CleanerShortInfo cleanerInfo)
 		{
-			throw new NotImplementedException();
+			return Task.FromResult(Random.Shared.Next(50));
 		}
 
 		public Task<List<CleanerInfo>> GetAllCleanersAsync()
 		{
-			throw new NotImplementedException();
+			var cleaners = new List<CleanerInfo>();
+			for (int i = 0; i < 25; i++)
+			{
+				cleaners.Add(new CleanerInfo
+				{
+					CleanerId = i,
+					CleanerName = $"Nikita{i}",
+					PhoneNumber = $"+375_{i}"
+				});
+			};
+			return Task.FromResult(cleaners);
 		}
 
 		public Task<List<CleanerInfo>> GetALLCleanersByAddressAsync(string address)
 		{
-			throw new NotImplementedException();
+			var cleaners = new List<CleanerInfo>();
+			for (int i = 0; i < 25; i++)
+			{
+				cleaners.Add(new CleanerInfo
+				{
+					CleanerId = i,
+					CleanerName = $"Nikita{i}",
+					PhoneNumber = $"+375_{i}"
+				});
+			};
+			return Task.FromResult(cleaners);
 		}
 
 		public Task<CleanerInfo> GetCleanerAsync(string address)
 		{
-			throw new NotImplementedException();
+			int x = Random.Shared.Next(50);
+			return Task.FromResult(new CleanerInfo
+			{
+				CleanerId = x,
+				CleanerName = $"Nikita{x}",
+				PhoneNumber = $"+3753333551{x}"
+			});
 		}
 
 		public Task<CleanerInfo> GetCleanerByIdAsync(int cleanerId)
 		{
-			return Task.Run(() => new CleanerInfo
+			return Task.FromResult(new CleanerInfo
 			{
 				CleanerId = cleanerId,
 				CleanerName = $"Nikita{cleanerId}",
@@ -42,12 +68,22 @@ namespace Infrastructure.Services
 
 		public Task<List<CleanerInfo>> GetSetOfCleanersAsync(int amount, string address)
 		{
-			throw new NotImplementedException();
+			var cleaners = new List<CleanerInfo>();
+			for (int i = 0; i < amount; i++)
+			{
+				cleaners.Add(new CleanerInfo
+				{
+					CleanerId = i,
+					CleanerName = $"Nikita{i}",
+					PhoneNumber = $"+375_{i}"
+				});
+			};
+			return Task.FromResult(cleaners);
 		}
 
 		public Task RemoveCleanerAsync(int cleanerId)
 		{
-			throw new NotImplementedException();
+			return Task.CompletedTask;
 		}
 	}
 }
