@@ -14,7 +14,7 @@ namespace API.Controllers
 			_cleanerNotification = cleanerNotification;
 		}
 
-		[HttpPost]
+		[HttpPost("update")]
 		public async Task CleanerIsComing(CleanerNotificationInfo cleanerInfo)
 		{
 			await _cleanerNotification.UpdateCleanerConditionAsync(cleanerInfo);

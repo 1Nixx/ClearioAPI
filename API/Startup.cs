@@ -1,5 +1,6 @@
 ﻿using API.Helpers;
 using API.Middleware;
+using Core.CleanerNotificationService;
 using Core.Interfaces;
 using Core.OrderService;
 using Infrastructure.Data;
@@ -24,6 +25,7 @@ namespace API
 			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 			services.AddScoped<ICleanerRepository, CleanerRepository>();
 			services.AddScoped<IOrderService, OrderService>();
+			services.AddScoped<ICleanerNotificationService, CleanerNotificationService>();
 
 			services.AddCors();
 
