@@ -12,5 +12,7 @@ namespace Core.OrderService
 	{
 		Task AddOrderAsync(OrderBaseInfo orderInfo);
 		Task AddNewCleanerToOrderAsync(int orderId, int newCleaner);
+
+		Task ChangeOrderStatus(int orderId, int statusId);
 	}
 }

@@ -4,6 +4,7 @@ using Core.Entities;
 using Core.Interfaces;
 using Core.OrderService;
 using Core.Specification;
+using Infrastructure.Quartz;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -51,6 +52,12 @@ namespace API.Controllers
 		public async Task AddCleanerToOrder(int id,[FromQuery] int cleanerId)
 		{
 			await _orderService.AddNewCleanerToOrderAsync(id, cleanerId);
+		}
+
+		[HttpPost("changestatus/{id}")]
+		public async Task ChangeOrderStatus(int id, [FromQuery] int newStatus)
+		{
+			await _orderService.ChangeOrderStatus(id, newStatus);
 		}
 	}
 }

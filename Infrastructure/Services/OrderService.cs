@@ -3,6 +3,7 @@ using Core.Entities;
 using Core.Interfaces;
 using Core.OrderService;
 using Core.Specification;
+using Infrastructure.Quartz;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,14 @@ namespace Infrastructure.Services
 	{
 		private readonly IGenericRepository<Order> _orderRepository;
 		private readonly ICleanerRepository _cleanerRepository;
-		private readonly DelayedTaskService _delayedTaskService;
-		public OrderService(IGenericRepository<Order> orderRepository, ICleanerRepository cleanerRepository, DelayedTaskService delayedTask)
+		//private readonly OrderStatusScheduler _orderStatusScheduler;
+		private readonly IServiceProvider _serviceProvider;
+		public OrderService(IGenericRepository<Order> orderRepository, ICleanerRepository cleanerRepository,/*, OrderStatusScheduler orderStatusScheduler*/ IServiceProvider serviceProvider)
 		{
 			_orderRepository = orderRepository;
 			_cleanerRepository = cleanerRepository;
-			_delayedTaskService = delayedTask;
+			//_orderStatusScheduler = orderStatusScheduler;	
+			_serviceProvider = serviceProvider;
 		}
 
 		public async Task AddNewCleanerToOrderAsync(int orderId, int newCleaner)
@@ -35,6 +38,16 @@ namespace Infrastructure.Services
 		{
 			var order = await ConvertOrderBaseInfoToOrderAsync(orderInfo);
 			await _orderRepository.AddEntityAsync(order);
+
+			OrderStatusScheduler.OrderStartCleaning(order.Id, order.TimeStart, _serviceProvider);
+			OrderStatusScheduler.OrderEndCleaning(order.Id, order.TimeEnd, _serviceProvider);
+		}
+
+		public async Task ChangeOrderStatus(int orderId, int statusId)
+		{
+			var order = await _orderRepository.GetByIdAsync(orderId);
+			order.OrderStatus = (OrderStatus)statusId;
+			await _orderRepository.UpdateEntityAsync(order);
 		}
 
 		private async Task<Order> ConvertOrderBaseInfoToOrderAsync(OrderBaseInfo baseInfo)

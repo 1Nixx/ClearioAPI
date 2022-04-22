@@ -4,9 +4,12 @@ using Core.CleanerNotificationService;
 using Core.Interfaces;
 using Core.OrderService;
 using Infrastructure.Data;
+using Infrastructure.Quartz;
+using Infrastructure.Quartz.Jobs;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Quartz;
 
 namespace API
 {
@@ -26,7 +29,10 @@ namespace API
 			services.AddScoped<ICleanerRepository, CleanerRepository>();
 			services.AddScoped<IOrderService, OrderService>();
 			services.AddScoped<ICleanerNotificationService, CleanerNotificationService>();
-			services.AddSingleton<DelayedTaskService>();
+
+			services.AddTransient<JobFactory>();
+			services.AddScoped<StartOrderJob>();
+			services.AddScoped<FinishOrderJob>();
 
 			services.AddCors();
 
