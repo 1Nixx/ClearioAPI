@@ -35,7 +35,13 @@ namespace API
 			services.AddScoped<FinishOrderJob>();
 			services.AddScoped<ForcedFinishJob>();
 
-			services.AddCors();
+			services.AddCors(opt =>
+			{
+				opt.AddPolicy("CorsPolicy", policy =>
+				{
+					policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+				});
+			});
 
 			services.AddDbContext<CleaningContext>(x => x.UseSqlite(_configuration.GetConnectionString("DefaultConnection")));
 			services.AddSwaggerGen(c =>
@@ -59,7 +65,7 @@ namespace API
 
 			app.UseRouting();
 
-			app.UseCors(builder => builder.AllowAnyOrigin());
+			app.UseCors("CorsPolicy");
 
 			app.UseEndpoints(endpoints =>
 			{
