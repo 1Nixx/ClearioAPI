@@ -39,8 +39,9 @@ namespace Infrastructure.Services
 			var order = await ConvertOrderBaseInfoToOrderAsync(orderInfo);
 			await _orderRepository.AddEntityAsync(order);
 
-			//OrderStatusScheduler.OrderStartCleaning(order.Id, order.TimeStart, _serviceProvider);
-			//OrderStatusScheduler.OrderEndCleaning(order.Id, order.TimeEnd, _serviceProvider);
+			OrderStatusScheduler.OrderStartCleaning(order.Id, order.TimeStart, _serviceProvider);
+			OrderStatusScheduler.OrderEndCleaning(order.Id, order.TimeEnd, _serviceProvider);
+			OrderStatusScheduler.OrderForciblyEnd(order.Id, order.TimeEnd, _serviceProvider);
 		}
 
 		public async Task ChangeOrderStatus(int orderId, int statusId)

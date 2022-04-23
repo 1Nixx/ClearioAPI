@@ -33,6 +33,7 @@ namespace API
 			services.AddTransient<JobFactory>();
 			services.AddScoped<StartOrderJob>();
 			services.AddScoped<FinishOrderJob>();
+			services.AddScoped<ForcedFinishJob>();
 
 			services.AddCors();
 

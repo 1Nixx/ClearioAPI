@@ -9,7 +9,8 @@ namespace Core.Specification
 {
 	public class OrdersWithCleanersForNotification : BaseSpecification<Order>
 	{
-		public OrdersWithCleanersForNotification(int objectId) : base (x => x.CleaningObjectId == objectId && x.OrderStatus != OrderStatus.CleaningFinished)
+		public OrdersWithCleanersForNotification(int objectId) : 
+			base (x => x.CleaningObjectId == objectId && x.OrderStatus != OrderStatus.CleaningFinished && x.OrderStatus != OrderStatus.FinishedForcibly)
 		{
 			AddInclude(x => x.Cleaners);
 		}

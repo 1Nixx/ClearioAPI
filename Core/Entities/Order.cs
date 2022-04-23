@@ -23,6 +23,6 @@ namespace Core.Entities
 		CleanerNotCome,
 		CleaningInProcess,
 		CleaningFinished,
-		Error
+		FinishedForcibly
 	}
 }
