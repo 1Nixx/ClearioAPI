@@ -14,7 +14,7 @@ namespace Core.Interfaces
 		Task<List<CleanerInfo>> GetSetOfCleanersAsync(int amount, string address);
 		Task<CleanerInfo> GetCleanerAsync(string address);
 		Task<CleanerInfo> GetCleanerByIdAsync(int cleanerId);
-		Task<int> AddCleanerAsync(CleanerShortInfo cleanerInfo, string city);
+		Task<int> AddCleanerAsync(CleanerShortInfo cleanerInfo);
 		Task RemoveCleanerAsync(int cleanerId);
 	}
 }

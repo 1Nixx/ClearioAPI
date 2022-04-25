@@ -23,13 +23,13 @@ namespace Infrastructure.Services
 			_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 		}
 		 
-		public Task<int> AddCleanerAsync(CleanerShortInfo cleanerInfo, string city)
+		public Task<int> AddCleanerAsync(CleanerShortInfo cleanerInfo)
 		{
 			var newCleaner = new CleanerRemoteInfo()
 			{
 				name = cleanerInfo.CleanerName.Split(" ")[0],
 				surname = cleanerInfo.CleanerName.Split(" ")[1],
-				city = city,
+				//city = city,
 				isworking = false,
 				phonenumber = cleanerInfo.PhoneNumber,
 				rating = 0
