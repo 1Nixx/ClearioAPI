@@ -63,7 +63,7 @@ namespace API.Controllers
 		[HttpDelete("delete")]
 		public async Task RemoveCleaner(int id)
 		{
-			_cleanerRepository.RemoveCleanerAsync(id);	
+			await _cleanerRepository.RemoveCleanerAsync(id);	
 		}
 	}
 }

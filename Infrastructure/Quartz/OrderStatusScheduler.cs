@@ -23,7 +23,7 @@ namespace Infrastructure.Quartz
 
 			IJobDetail jobDetail = JobBuilder.Create<StartOrderJob>().UsingJobData("orderId", orderId).Build();
 			ITrigger trigger = TriggerBuilder.Create()
-				.WithIdentity("MailingTrigger", "default")
+				.WithIdentity($"order {orderId}", "startCleaning")
 				.StartAt(resultTime)
 				.ForJob(jobDetail)
 				.Build();
@@ -47,6 +47,25 @@ namespace Infrastructure.Quartz
 				.WithSimpleSchedule(s => s
 					.WithRepeatCount(5)
 					.WithIntervalInSeconds(10))
+				.ForJob(jobDetail)
+				.Build();
+
+			await scheduler.ScheduleJob(jobDetail, trigger);
+		}
+
+		public static async Task OrderForciblyEnd(int orderId, DateTime finishTime, IServiceProvider serviceProvider)
+		{
+			IScheduler scheduler = await StdSchedulerFactory.GetDefaultScheduler();
+			scheduler.JobFactory = serviceProvider.GetService<JobFactory>();
+			await scheduler.Start();
+
+			var timeAmount = finishTime - DateTime.Now;
+			var resultTime = DateTime.Now + timeAmount + TimeSpan.FromSeconds(80);
+
+			IJobDetail jobDetail = JobBuilder.Create<ForcedFinishJob>().UsingJobData("orderId", orderId).Build();
+			ITrigger trigger = TriggerBuilder.Create()
+				.WithIdentity($"order {orderId}", "forciblyCleaning")
+				.StartAt(resultTime)
 				.ForJob(jobDetail)
 				.Build();
 

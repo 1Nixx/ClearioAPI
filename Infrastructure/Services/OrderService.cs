@@ -41,6 +41,7 @@ namespace Infrastructure.Services
 
 			//OrderStatusScheduler.OrderStartCleaning(order.Id, order.TimeStart, _serviceProvider);
 			//OrderStatusScheduler.OrderEndCleaning(order.Id, order.TimeEnd, _serviceProvider);
+			//OrderStatusScheduler.OrderForciblyEnd(order.Id, order.TimeEnd, _serviceProvider);
 		}
 
 		public async Task ChangeOrderStatus(int orderId, int statusId)
