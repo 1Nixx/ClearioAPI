@@ -26,7 +26,7 @@ namespace API
 		{
 			services.AddAutoMapper(typeof(MappingProfiles));
 			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-			services.AddScoped<ICleanerRepository, CleanerRepository>();
+			services.AddSingleton<ICleanerRepository, CleanerRepository>();
 			services.AddScoped<IOrderService, OrderService>();
 			services.AddScoped<ICleanerNotificationService, CleanerNotificationService>();
 

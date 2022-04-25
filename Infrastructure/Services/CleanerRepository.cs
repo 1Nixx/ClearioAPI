@@ -3,6 +3,10 @@ using Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,80 +14,114 @@ namespace Infrastructure.Services
 {
 	public class CleanerRepository : ICleanerRepository
 	{
-		public Task<int> AddCleanerAsync(CleanerShortInfo cleanerInfo)
+		private readonly HttpClient _httpClient;
+		public CleanerRepository()
 		{
-			return Task.FromResult(Random.Shared.Next(50));
+			_httpClient = new HttpClient();
+			_httpClient.BaseAddress = new Uri("http://127.0.0.1:8000/");
+			_httpClient.DefaultRequestHeaders.Accept.Clear();
+			_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 		}
-
-		public Task<List<CleanerInfo>> GetAllCleanersAsync()
+		 
+		public Task<int> AddCleanerAsync(CleanerShortInfo cleanerInfo, string city)
 		{
-			var cleaners = new List<CleanerInfo>();
-			for (int i = 0; i < 25; i++)
+			var newCleaner = new CleanerRemoteInfo()
 			{
-				cleaners.Add(new CleanerInfo
-				{
-					CleanerId = i,
-					CleanerName = $"Nikita{i}",
-					PhoneNumber = $"+375_{i}"
-				});
+				name = cleanerInfo.CleanerName.Split(" ")[0],
+				surname = cleanerInfo.CleanerName.Split(" ")[1],
+				city = city,
+				isworking = false,
+				phonenumber = cleanerInfo.PhoneNumber,
+				rating = 0
 			};
-			return Task.FromResult(cleaners);
+			return Task.FromResult(0);
 		}
 
-		public Task<List<CleanerInfo>> GetALLCleanersByAddressAsync(string address)
+		public async Task<List<CleanerInfo>> GetAllCleanersAsync()
 		{
-			var cleaners = new List<CleanerInfo>();
-			for (int i = 0; i < 25; i++)
+			var resultList = new List<CleanerInfo>();
+			HttpResponseMessage response = await _httpClient.GetAsync("cleaners/");
+			if (response.IsSuccessStatusCode)
 			{
-				cleaners.Add(new CleanerInfo
-				{
-					CleanerId = i,
-					CleanerName = $"Nikita{i}",
-					PhoneNumber = $"+375_{i}"
-				});
-			};
-			return Task.FromResult(cleaners);
+				var cleaners = await response.Content.ReadFromJsonAsync<CleanerRemoteInfo[]>();
+				for (int i = 0; i < cleaners.Length; i++)
+					resultList.Add(GetCleanerInfoFromRemote(cleaners[i]));
+			}
+			return resultList;
 		}
 
-		public Task<CleanerInfo> GetCleanerAsync(string address)
+		public async Task<List<CleanerInfo>> GetALLCleanersByAddressAsync(string address)
 		{
-			int x = Random.Shared.Next(50);
-			return Task.FromResult(new CleanerInfo
+			var resultList = new List<CleanerInfo>();
+			var city = GetCityFromAddress(address);
+			HttpResponseMessage response = await _httpClient.GetAsync($"cleaners/?city={city}");
+			if (response.IsSuccessStatusCode)
 			{
-				CleanerId = x,
-				CleanerName = $"Nikita{x}",
-				PhoneNumber = $"+3753333551{x}"
-			});
+				var cleaners = await response.Content.ReadFromJsonAsync<CleanerRemoteInfo[]>();
+				for (int i = 0; i < cleaners.Length; i++)
+					resultList.Add(GetCleanerInfoFromRemote(cleaners[i]));
+			}
+			return resultList;
 		}
 
-		public Task<CleanerInfo> GetCleanerByIdAsync(int cleanerId)
+		public async Task<CleanerInfo> GetCleanerAsync(string address)
 		{
-			return Task.FromResult(new CleanerInfo
+			var result = new CleanerInfo();
+			var city = GetCityFromAddress(address);
+			HttpResponseMessage response = await _httpClient.GetAsync($"byone/?city={city}");
+			if (response.IsSuccessStatusCode)
 			{
-				CleanerId = cleanerId,
-				CleanerName = $"Nikita{cleanerId}",
-				PhoneNumber = $"+3753333551{cleanerId}"
-			});
+				var cleaners = await response.Content.ReadFromJsonAsync<ByoneRemoteInfo>();
+				result = GetCleanerInfoFromRemote(cleaners.results[0]);
+			}
+			return result;
 		}
 
-		public Task<List<CleanerInfo>> GetSetOfCleanersAsync(int amount, string address)
+		public async Task<CleanerInfo> GetCleanerByIdAsync(int cleanerId)
 		{
-			var cleaners = new List<CleanerInfo>();
-			for (int i = 0; i < amount; i++)
+			var result = new CleanerInfo();
+			HttpResponseMessage response = await _httpClient.GetAsync($"cleaners/{cleanerId}");
+			if (response.IsSuccessStatusCode)
 			{
-				cleaners.Add(new CleanerInfo
-				{
-					CleanerId = i,
-					CleanerName = $"Nikita{i}",
-					PhoneNumber = $"+375_{i}"
-				});
-			};
-			return Task.FromResult(cleaners);
+				var cleaner = await response.Content.ReadFromJsonAsync<CleanerRemoteInfo>();
+				result = GetCleanerInfoFromRemote(cleaner);
+			}
+			return result;
+		}
+
+		public async Task<List<CleanerInfo>> GetSetOfCleanersAsync(int amount, string address)
+		{
+			var resultList = new List<CleanerInfo>();
+			var city = GetCityFromAddress(address);
+			HttpResponseMessage response = await _httpClient.GetAsync($"byone/?city={city}&limit={amount}&offset=1");
+			if (response.IsSuccessStatusCode)
+			{
+				var cleaners = await response.Content.ReadFromJsonAsync<ByoneRemoteInfo>();
+				for (int i = 0; i < cleaners.results.Length; i++)
+					resultList.Add(GetCleanerInfoFromRemote(cleaners.results[i]));
+			}
+			return resultList;
 		}
 
 		public Task RemoveCleanerAsync(int cleanerId)
 		{
 			return Task.CompletedTask;
+		}
+
+		public static CleanerInfo GetCleanerInfoFromRemote(CleanerRemoteInfo cleanerRemote)
+		{
+			return new CleanerInfo()
+			{
+				CleanerId = cleanerRemote.id,
+				CleanerName = cleanerRemote.name + " " + cleanerRemote.surname,
+				PhoneNumber = cleanerRemote.phonenumber
+			};
+		}
+	
+		public static string GetCityFromAddress(string address)
+		{
+			var items = address.Split(" ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+			return items[0];
 		}
 	}
 }
