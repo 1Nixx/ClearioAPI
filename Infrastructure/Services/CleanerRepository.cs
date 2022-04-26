@@ -23,18 +23,19 @@ namespace Infrastructure.Services
 			_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 		}
 		 
-		public Task<int> AddCleanerAsync(CleanerShortInfo cleanerInfo)
+		public async Task<int> AddCleanerAsync(CleanerShortInfo cleanerInfo)
 		{
 			var newCleaner = new CleanerRemoteInfo()
 			{
 				name = cleanerInfo.CleanerName.Split(" ")[0],
 				surname = cleanerInfo.CleanerName.Split(" ")[1],
-				//city = city,
+				city = cleanerInfo.City,
 				isworking = false,
 				phonenumber = cleanerInfo.PhoneNumber,
 				rating = 0
 			};
-			return Task.FromResult(0);
+			HttpResponseMessage response = await _httpClient.PostAsJsonAsync("/cleaners/", newCleaner);
+			return 0;
 		}
 
 		public async Task<List<CleanerInfo>> GetAllCleanersAsync()
