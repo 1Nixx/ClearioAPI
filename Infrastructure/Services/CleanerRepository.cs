@@ -1,5 +1,6 @@
 ﻿using Core.CleanerRepository;
 using Core.Interfaces;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,26 +16,20 @@ namespace Infrastructure.Services
 	public class CleanerRepository : ICleanerRepository
 	{
 		private readonly HttpClient _httpClient;
-		public CleanerRepository()
+		public CleanerRepository(IConfiguration configuration)
 		{
 			_httpClient = new HttpClient();
-			_httpClient.BaseAddress = new Uri("http://127.0.0.1:8000/");
+			_httpClient.BaseAddress = new Uri(configuration["cleanerApi"]);
 			_httpClient.DefaultRequestHeaders.Accept.Clear();
 			_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 		}
 		 
 		public async Task<int> AddCleanerAsync(CleanerShortInfo cleanerInfo)
 		{
-			var newCleaner = new CleanerRemoteInfo()
-			{
-				name = cleanerInfo.CleanerName.Split(" ")[0],
-				surname = cleanerInfo.CleanerName.Split(" ")[1],
-				city = cleanerInfo.City,
-				isworking = false,
-				phonenumber = cleanerInfo.PhoneNumber,
-				rating = 0
-			};
-			HttpResponseMessage response = await _httpClient.PostAsJsonAsync("/cleaners/", newCleaner);
+			var str = $"{{\"name\": \"{cleanerInfo.CleanerName.Split(" ")[0]}\",\"surname\": \"{cleanerInfo.CleanerName.Split(" ")[1]}\",\"city\": \"{cleanerInfo.City}\",\"phonenumber\": \"{cleanerInfo.PhoneNumber}\",\"isworking\": false,\"rating\": 0}}";
+			var data = new HttpRequestMessage(HttpMethod.Post, "cleaners/");
+			data.Content = new StringContent(str, Encoding.UTF8, "application/json");
+			HttpResponseMessage response = await _httpClient.SendAsync(data);
 			return 0;
 		}
 
