@@ -23,6 +23,9 @@ namespace Infrastructure.Services
 			var spec = new OrdersWithCleanersForNotification(cleanerInfo.ObjectId);
 			var order = await _orderRepository.GetEntityWithSpec(spec);
 
+			if (order is null)
+				return;
+
 			foreach (var cleaner in order.Cleaners)
 			{
 				if (cleaner.CleanerId == cleanerInfo.ClenerId)
