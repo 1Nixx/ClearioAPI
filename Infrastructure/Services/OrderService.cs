@@ -31,6 +31,7 @@ namespace Infrastructure.Services
 			var spec = new OrderWithCleaners(orderId);
 			var order = await _orderRepository.GetEntityWithSpec(spec);
 			order.Cleaners.Add(GetTeamMember(await _cleanerRepository.GetCleanerByIdAsync(newCleaner)));
+			order.OrderStatus = OrderStatus.CleaningInProcess;
 			await _orderRepository.UpdateEntityAsync(order);
 		}
 
