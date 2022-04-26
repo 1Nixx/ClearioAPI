@@ -30,6 +30,9 @@ namespace Infrastructure.Quartz.Jobs
             var spec = new OrderWithCleaners(orderId);
             var order = await _orderRepository.GetEntityWithSpec(spec);
 
+            if (order is null)
+                return;
+
             bool allCome = true;
 			foreach (var cleaner in order.Cleaners)
 			{

@@ -25,10 +25,12 @@ namespace Infrastructure.Quartz.Jobs
             var _orderRepository = scope.ServiceProvider.GetService<IGenericRepository<Order>>();
 
             var orderId = context.JobDetail.JobDataMap.GetIntValue("orderId");
-
             var order = await _orderRepository.GetByIdAsync(orderId);
 
-			if (order.OrderStatus != OrderStatus.CleaningFinished)
+            if (order is null)
+                return;
+
+            if (order.OrderStatus != OrderStatus.CleaningFinished)
 			{
                 order.OrderStatus = OrderStatus.FinishedForcibly;
                 await _orderRepository.UpdateEntityAsync(order);
