@@ -16,14 +16,10 @@ namespace Infrastructure.Services
 	{
 		private readonly IGenericRepository<Order> _orderRepository;
 		private readonly ICleanerRepository _cleanerRepository;
-		//private readonly OrderStatusScheduler _orderStatusScheduler;
-		private readonly IServiceProvider _serviceProvider;
-		public OrderService(IGenericRepository<Order> orderRepository, ICleanerRepository cleanerRepository,/*, OrderStatusScheduler orderStatusScheduler*/ IServiceProvider serviceProvider)
+		public OrderService(IGenericRepository<Order> orderRepository, ICleanerRepository cleanerRepository)
 		{
 			_orderRepository = orderRepository;
 			_cleanerRepository = cleanerRepository;
-			//_orderStatusScheduler = orderStatusScheduler;	
-			_serviceProvider = serviceProvider;
 		}
 
 		public async Task AddNewCleanerToOrderAsync(int orderId, int newCleaner)
