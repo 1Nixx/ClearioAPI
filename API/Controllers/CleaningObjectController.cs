@@ -39,6 +39,12 @@ namespace API.Controllers
 			return Ok(_mapper.Map<IReadOnlyList<CleaningObject>, IReadOnlyList<CleaningObjectShortInfo>>(objectList));
 		}
 
+		[HttpDelete("delete/{id}")]
+		public async Task DeleteObject(int id)
+		{
+			await _context.DeleteByIdAsync(id);
+		}
+
 
 	}
 }
