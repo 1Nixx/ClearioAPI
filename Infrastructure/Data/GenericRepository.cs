@@ -48,6 +48,7 @@ namespace Infrastructure.Data
 
 		public async Task<int> AddEntityAsync(T entity)
 		{
+			entity.Id = 0;
 			await _context.AddAsync(entity);
 			await _context.SaveChangesAsync();
 			return entity.Id;

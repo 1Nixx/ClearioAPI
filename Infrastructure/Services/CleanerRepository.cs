@@ -89,7 +89,7 @@ namespace Infrastructure.Services
 		{
 			var resultList = new List<CleanerInfo>();
 			var city = GetCityFromAddress(address);
-			HttpResponseMessage response = await _httpClient.GetAsync($"byone/?city={city}&limit={amount}&offset=1");
+			HttpResponseMessage response = await _httpClient.GetAsync($"byone/?city={city}&limit={amount}&offset=0");
 			if (response.IsSuccessStatusCode)
 			{
 				var cleaners = await response.Content.ReadFromJsonAsync<ByoneRemoteInfo>();
