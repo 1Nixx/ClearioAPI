@@ -59,5 +59,11 @@ namespace API.Controllers
 		{
 			await _orderService.ChangeOrderStatus(id, newStatus);
 		}
+
+		[HttpDelete("delete/{id}")]
+		public async Task DeleteOrder(int id)
+		{
+			await _orderService.DeleteOrderAsync(id);
+		}
 	}
 }

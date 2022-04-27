@@ -16,10 +16,12 @@ namespace Infrastructure.Services
 	{
 		private readonly IGenericRepository<Order> _orderRepository;
 		private readonly ICleanerRepository _cleanerRepository;
-		public OrderService(IGenericRepository<Order> orderRepository, ICleanerRepository cleanerRepository)
+		private readonly IServiceProvider _serviceProvider;
+		public OrderService(IGenericRepository<Order> orderRepository, ICleanerRepository cleanerRepository, IServiceProvider serviceProvider)
 		{
 			_orderRepository = orderRepository;
 			_cleanerRepository = cleanerRepository;
+			_serviceProvider = serviceProvider;
 		}
 
 		public async Task AddNewCleanerToOrderAsync(int orderId, int newCleaner)
@@ -36,9 +38,9 @@ namespace Infrastructure.Services
 			var order = await ConvertOrderBaseInfoToOrderAsync(orderInfo);
 			await _orderRepository.AddEntityAsync(order);
 
-			//OrderStatusScheduler.OrderStartCleaning(order.Id, order.TimeStart, _serviceProvider);
-			//OrderStatusScheduler.OrderEndCleaning(order.Id, order.TimeEnd, _serviceProvider);
-			//OrderStatusScheduler.OrderForciblyEnd(order.Id, order.TimeEnd, _serviceProvider);
+			OrderStatusScheduler.OrderStartCleaning(order.Id, order.TimeStart, _serviceProvider);
+			OrderStatusScheduler.OrderEndCleaning(order.Id, order.TimeEnd, _serviceProvider);
+			OrderStatusScheduler.OrderForciblyEnd(order.Id, order.TimeEnd, _serviceProvider);
 		}
 
 		public async Task ChangeOrderStatus(int orderId, int statusId)
@@ -46,6 +48,12 @@ namespace Infrastructure.Services
 			var order = await _orderRepository.GetByIdAsync(orderId);
 			order.OrderStatus = (OrderStatus)statusId;
 			await _orderRepository.UpdateEntityAsync(order);
+		}
+
+		public async Task DeleteOrderAsync(int orderId)
+		{
+			var spec = new OrderWithCleaners(orderId);
+			await _orderRepository.DeleteWithSpec(spec);
 		}
 
 		private async Task<Order> ConvertOrderBaseInfoToOrderAsync(OrderBaseInfo baseInfo)
