@@ -47,6 +47,12 @@ namespace Infrastructure.Services
 			await _orderRepository.UpdateEntityAsync(order);
 		}
 
+		public async Task DeleteOrderAsync(int orderId)
+		{
+			var spec = new OrderWithCleaners(orderId);
+			await _orderRepository.DeleteWithSpec(spec);
+		}
+
 		private async Task<Order> ConvertOrderBaseInfoToOrderAsync(OrderBaseInfo baseInfo)
 		{
 			var order = new Order();

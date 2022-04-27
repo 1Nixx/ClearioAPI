@@ -72,5 +72,15 @@ namespace Infrastructure.Data
 		{
 			return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
 		}
+
+		public async Task DeleteWithSpec(ISpecification<T> spec)
+		{
+			var order = await ApplySpecification(spec).FirstOrDefaultAsync();
+			if (order != null)
+			{
+				_context.Set<T>().Remove(order);
+				await _context.SaveChangesAsync();
+			}
+;		}
 	}
 }
